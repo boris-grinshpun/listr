@@ -1,0 +1,20 @@
+textarea{
+    width: 500px;
+    height: 300px;
+}
+.results {
+    width: 500px;
+    height: 300px;
+    border: 1px solid pink;
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.results-wrapper{
+    display: flex;
+    align-items: center
+}
