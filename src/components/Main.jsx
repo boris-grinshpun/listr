@@ -10,20 +10,30 @@ export const Main = function () {
     const [text, setText] = useState("")
     const [rows, setRows] = useState(1)
     const [columns, setColumns] = useState(1)
-
-    function clickHandler() {
-        console.log(textElement.current.value)
-    }
     useEffect(() => {
         console.log(text)
         console.log(rows, columns)
-    }, ['text', 'rows', 'columns']);
+        const parsed = parceColRow()
+        console.log(parsed)
+    }, [rows])
+    useEffect(() => {
+        console.log(text)
+        console.log(rows, columns)
+        const parsed = parceColRow('col')
+        console.log(parsed)
+    }, [columns])
+
+    function textChangeHandler() {
+        setText(textElement.current.value)
+    }
 
     function handleChangeColumns(e, val) {
-        setColumns(val)
+        setColumns(Number(val))
+       
     }
     function handleChangeRows(e, val) {
         setRows(Number(val))
+
     }
     function valueColumns(value) {
         return `${value}`;
@@ -36,20 +46,26 @@ export const Main = function () {
             event.preventDefault();
         }
     }
-    const [value, setValue] = useState(30);
 
-    const handleChange = (event, newValue) => {
-        setValue(newValue);
-    };
+    function parceColRow(method){
+        const words = text.split(" ").map(i=>i.trim())
+        const devider = method === 'col' ? columns : Math.ceil(words.length / rows)
+        console.log(words, columns)
+        return words.reduce((acc, word, index)=>{
+           if (word)
+                acc += word + ','
+            if ((index + 1) % devider === 0){
+                acc += "\n"
+            }
+            return acc
+        },"")
+
+    }
     return (
         <div>
             <div className='wrapper'>
-                <button onClick={clickHandler}>
-                    proccess
-                </button>
-
                 <div>
-                    <textarea name="text" id="text" ref={textElement} cols="50" rows="20"></textarea>
+                    <textarea name="text" id="text" ref={textElement} cols="50" rows="20" onChange={textChangeHandler}></textarea>
                 </div>
 
                 <Box sx={{ width: 300 }}>
