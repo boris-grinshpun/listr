@@ -9,6 +9,8 @@ textarea{
     white-space: pre-wrap;
     text-align: left;
     overflow: scroll;
+    font-family: monospace;
+    white-space: pre;
 }
 
 .wrapper {

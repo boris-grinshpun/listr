@@ -14,19 +14,19 @@ export const Main = function () {
     const [columns, setColumns] = useState(5)
     const [lastAction, setLastAction] = useState(null)
     useEffect(() => {
-        setParsed(parceColRow())
+        setParsed(parseColRow())
         setLastAction(null)
     }, [rows])
     useEffect(() => {
-        setParsed(parceColRow('col'))
+        setParsed(parseColRow('col'))
         setLastAction('col')
     }, [columns])
     useEffect(() => {
         if (lastAction === 'col')
-            setParsed(parceColRow('col'))
+            setParsed(parseColRow('col'))
         else
-            setParsed(parceColRow())
-    },[text])
+            setParsed(parseColRow())
+    }, [text])
 
     function textChangeHandler() {
         setText(textElement.current.value)
@@ -34,7 +34,7 @@ export const Main = function () {
 
     function handleChangeColumns(e, val) {
         setColumns(Number(val))
-       
+
     }
     function handleChangeRows(e, val) {
         setRows(Number(val))
@@ -52,19 +52,36 @@ export const Main = function () {
         }
     }
 
-    function parceColRow(method){
-        const words = text.replaceAll('\n'," ").split(" ").map(i=>i.trim())
-        const devider = method === 'col' ? columns : Math.ceil(words.length / rows)
-        console.log(words, columns)
-        return words.reduce((acc, word, index)=>{
-           if (word)
-                acc += word + ','
-            if ((index + 1) % devider === 0){
-                acc += "\n"
+    function parseColRow(method) {
+        const words = text.replaceAll('\n', " ").split(" ").map(i => i.trim())
+        const grid = []
+        let row = []
+        let largestWordInColumn = []
+        let maxWordLength = 0
+        let col = 0
+        const devider = method === 'col' ? columns : Math.floor(words.length / rows)
+        words.forEach((word, index) => {
+            row.push(word)
+            let col = index % devider
+            if (!largestWordInColumn[col]) {
+                largestWordInColumn[col] = word.length
+            } else {
+                largestWordInColumn[col] = Math.max(largestWordInColumn[col], word.length)
             }
-            return acc
-        },"")
-
+            if ((index + 1) % devider === 0) {
+                grid.push(row)
+                row = []
+                maxWordLength = 0
+            }
+        })
+        let result = grid.map((row, indexRow)=>{
+            return row.map((word, indexCol)=>{
+                let numSpaces = largestWordInColumn[indexCol] - word.length + 1
+                return indexCol !== row.length - 1 ? `"${word}",${" ".repeat(numSpaces)}` : `${word}`
+            }).join("")
+        }).join("\n")
+        console.log(result, largestWordInColumn, method)
+        return result
     }
     return (
         <div>
