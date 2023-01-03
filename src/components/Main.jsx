@@ -3,25 +3,30 @@ import '../styles/main.css'
 import Box from '@mui/material/Box';
 import Slider from '@mui/material/Slider';
 import Stack from '@mui/material/Stack';
+import lorem from '../lorem'
 
 
 export const Main = function () {
     const textElement = useRef()
-    const [text, setText] = useState("")
-    const [rows, setRows] = useState(1)
-    const [columns, setColumns] = useState(1)
+    const [text, setText] = useState(lorem)
+    const [parsed, setParsed] = useState("")
+    const [rows, setRows] = useState(5)
+    const [columns, setColumns] = useState(5)
+    const [lastAction, setLastAction] = useState(null)
     useEffect(() => {
-        console.log(text)
-        console.log(rows, columns)
-        const parsed = parceColRow()
-        console.log(parsed)
+        setParsed(parceColRow())
+        setLastAction(null)
     }, [rows])
     useEffect(() => {
-        console.log(text)
-        console.log(rows, columns)
-        const parsed = parceColRow('col')
-        console.log(parsed)
+        setParsed(parceColRow('col'))
+        setLastAction('col')
     }, [columns])
+    useEffect(() => {
+        if (lastAction === 'col')
+            setParsed(parceColRow('col'))
+        else
+            setParsed(parceColRow())
+    },[text])
 
     function textChangeHandler() {
         setText(textElement.current.value)
@@ -48,7 +53,7 @@ export const Main = function () {
     }
 
     function parceColRow(method){
-        const words = text.split(" ").map(i=>i.trim())
+        const words = text.replaceAll('\n'," ").split(" ").map(i=>i.trim())
         const devider = method === 'col' ? columns : Math.ceil(words.length / rows)
         console.log(words, columns)
         return words.reduce((acc, word, index)=>{
@@ -65,7 +70,7 @@ export const Main = function () {
         <div>
             <div className='wrapper'>
                 <div>
-                    <textarea name="text" id="text" ref={textElement} cols="50" rows="20" onChange={textChangeHandler}></textarea>
+                    <textarea name="text" id="text" ref={textElement} cols="50" rows="20" onChange={textChangeHandler} defaultValue={lorem}></textarea>
                 </div>
 
                 <Box sx={{ width: 300 }}>
@@ -85,7 +90,7 @@ export const Main = function () {
 
                 <div className='results-wrapper'>
                     <div className="results">
-
+                        {parsed}
                     </div>
                     <Box sx={{ height: 300 }}>
                         <Stack sx={{ height: 300 }} alignItems="center" direction="column">

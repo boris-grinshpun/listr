@@ -1,0 +1,1 @@
+export default "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Earum facilis at ipsam architecto deserunt quos voluptatem quaerat eos quia nisi."

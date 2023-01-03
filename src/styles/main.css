@@ -6,6 +6,9 @@ textarea{
     width: 500px;
     height: 300px;
     border: 1px solid pink;
+    white-space: pre-wrap;
+    text-align: left;
+    overflow: scroll;
 }
 
 .wrapper {
