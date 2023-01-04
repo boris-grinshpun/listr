@@ -1,32 +1,42 @@
 import { useRef, useState, useEffect } from 'react'
 import '../styles/main.css'
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 import Slider from '@mui/material/Slider';
 import Stack from '@mui/material/Stack';
 import lorem from '../lorem'
+import Comma from '../assets/Comma'
+import Quote from '../assets/Quote'
+import Apostrophie from '../assets/Apostrophie'
 
 
 export const Main = function () {
     const textElement = useRef()
     const [text, setText] = useState(lorem)
-    const [parsed, setParsed] = useState("")
+    const [grid, setGrid] = useState([])
+    const [gridSpacing, setGridSpacing] = useState([])
+    const [output, setOutput] = useState("")
     const [rows, setRows] = useState(5)
-    const [columns, setColumns] = useState(5)
+    const [columns, setColumns] = useState(2)
     const [lastAction, setLastAction] = useState(null)
     useEffect(() => {
-        setParsed(parseColRow())
+        parseColRow()
         setLastAction(null)
     }, [rows])
     useEffect(() => {
-        setParsed(parseColRow('col'))
+        parseColRow('col')
         setLastAction('col')
     }, [columns])
     useEffect(() => {
-        if (lastAction === 'col')
-            setParsed(parseColRow('col'))
-        else
-            setParsed(parseColRow())
+        if (lastAction === 'col'){
+            parseColRow('col')
+        } else {
+            parseColRow()
+        }
     }, [text])
+    useEffect(()=>{
+        buildOutput()
+    },[grid, gridSpacing])
 
     function textChangeHandler() {
         setText(textElement.current.value)
@@ -51,15 +61,15 @@ export const Main = function () {
             event.preventDefault();
         }
     }
-
+    function addTypography(type){
+        
+    }
     function parseColRow(method) {
         const words = text.replaceAll('\n', " ").split(" ").map(i => i.trim())
-        const grid = []
+        const prepGrid = []
         let row = []
         let largestWordInColumn = []
-        let maxWordLength = 0
-        let col = 0
-        const devider = method === 'col' ? columns : Math.floor(words.length / rows)
+        const devider = method === 'col' ? columns : Math.ceil(words.length / rows)
         words.forEach((word, index) => {
             row.push(word)
             let col = index % devider
@@ -69,25 +79,36 @@ export const Main = function () {
                 largestWordInColumn[col] = Math.max(largestWordInColumn[col], word.length)
             }
             if ((index + 1) % devider === 0) {
-                grid.push(row)
+                prepGrid.push(row)
                 row = []
-                maxWordLength = 0
             }
         })
-        let result = grid.map((row, indexRow)=>{
-            return row.map((word, indexCol)=>{
-                let numSpaces = largestWordInColumn[indexCol] - word.length + 1
-                return indexCol !== row.length - 1 ? `"${word}",${" ".repeat(numSpaces)}` : `${word}`
+        if (row.length) prepGrid.push(row)
+        setGrid(prepGrid)
+        setGridSpacing(largestWordInColumn)
+    }
+    function buildOutput(typography={comma: false, apostrophie: false, quote:false}){
+        let {comma, apostrophie, quote} = typography
+        let result = grid.map((row, indexRow) => {
+            return row.map((word, indexCol) => {
+                let numSpaces = gridSpacing[indexCol] - word.length + 1
+                return indexCol !== row.length - 1 ? `"${word}",${" ".repeat(numSpaces)}` : `"${word}"`
             }).join("")
         }).join("\n")
-        console.log(result, largestWordInColumn, method)
-        return result
+        // console.log(result, gridSpacing)
+        setOutput(result)
     }
     return (
         <div>
             <div className='wrapper'>
                 <div>
                     <textarea name="text" id="text" ref={textElement} cols="50" rows="20" onChange={textChangeHandler} defaultValue={lorem}></textarea>
+                </div>
+                <div className="data-structure">
+
+                    <Button variant="contained" size="small">Array</Button>
+                    <Button variant="outlined" size="small">Object</Button>
+                    <Button variant="outlined" size="small">Variables</Button>
                 </div>
 
                 <Box sx={{ width: 300 }}>
@@ -103,12 +124,11 @@ export const Main = function () {
                     />
                 </Box>
 
-
-
                 <div className='results-wrapper'>
                     <div className="results">
-                        {parsed}
+                        {output}
                     </div>
+
                     <Box sx={{ height: 300 }}>
                         <Stack sx={{ height: 300 }} alignItems="center" direction="column">
 
@@ -127,6 +147,11 @@ export const Main = function () {
                         </Stack>
                     </Box>
                 </div >
+                <div className="typography">
+                    <Button variant="outlined" title="Comma"><Comma className="icon" /></Button>
+                    <Button variant="outlined" title="Quote"><Quote className="icon" /></Button>
+                    <Button variant="outlined" title="Apostrophie"><Apostrophie className="icon" /></Button>
+                </div>
             </div>
         </div>
     )
