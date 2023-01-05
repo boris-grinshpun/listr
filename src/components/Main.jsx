@@ -1,16 +1,13 @@
 import { useRef, useState, useEffect } from 'react'
+import Typography from './Typography';
 import '../styles/main.css'
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Slider from '@mui/material/Slider';
 import Stack from '@mui/material/Stack';
 import lorem from '../lorem'
-import Comma from '../assets/Comma'
-import Quote from '../assets/Quote'
-import Apostrophie from '../assets/Apostrophie'
 
-
-export const Main = function () {
+export default function main() {
     const textElement = useRef()
     const [text, setText] = useState(lorem)
     const [grid, setGrid] = useState([])
@@ -19,6 +16,8 @@ export const Main = function () {
     const [rows, setRows] = useState(5)
     const [columns, setColumns] = useState(2)
     const [lastAction, setLastAction] = useState(null)
+    const options = {comma: "outlined", quote: "outlined", apostrophie: "outlined"}
+    const toggleTypograpgyClasses = ['outlined', "contained"]
     useEffect(() => {
         parseColRow()
         setLastAction(null)
@@ -102,7 +101,7 @@ export const Main = function () {
         <div>
             <div className='wrapper'>
                 <div>
-                    <textarea name="text" id="text" ref={textElement} cols="50" rows="20" onChange={textChangeHandler} defaultValue={lorem}></textarea>
+                    <textarea name="text" id="text" ref={textElement} cols="100" rows="10" onChange={textChangeHandler} defaultValue={lorem}></textarea>
                 </div>
                 <div className="data-structure">
 
@@ -147,11 +146,7 @@ export const Main = function () {
                         </Stack>
                     </Box>
                 </div >
-                <div className="typography">
-                    <Button variant="outlined" title="Comma"><Comma className="icon" /></Button>
-                    <Button variant="outlined" title="Quote"><Quote className="icon" /></Button>
-                    <Button variant="outlined" title="Apostrophie"><Apostrophie className="icon" /></Button>
-                </div>
+                <Typography options={options} classes={toggleTypograpgyClasses}/>
             </div>
         </div>
     )
