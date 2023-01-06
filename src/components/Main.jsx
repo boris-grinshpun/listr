@@ -8,6 +8,7 @@ import Stack from '@mui/material/Stack';
 import lorem from '../lorem'
 
 export default function main() {
+    const typographyClasses = {off: "outlined", on: "contained"}
     const textElement = useRef()
     const [text, setText] = useState(lorem)
     const [grid, setGrid] = useState([])
@@ -16,8 +17,15 @@ export default function main() {
     const [rows, setRows] = useState(5)
     const [columns, setColumns] = useState(2)
     const [lastAction, setLastAction] = useState(null)
-    const options = {comma: "outlined", quote: "outlined", apostrophie: "outlined"}
-    const toggleTypograpgyClasses = ['outlined', "contained"]
+    const [typographyOptions, setOptions] = useState({
+        comma: typographyClasses.off,
+        quote: typographyClasses.off,
+        apostrophie: typographyClasses.off
+    })
+    const [useComma, setUseComma] = useState(false)
+    const [useApostrophie, setUseApostrophie] = useState(false)
+    const [useQuote, setUseQuote] = useState(false)
+    
     useEffect(() => {
         parseColRow()
         setLastAction(null)
@@ -35,7 +43,7 @@ export default function main() {
     }, [text])
     useEffect(()=>{
         buildOutput()
-    },[grid, gridSpacing])
+    },[grid, gridSpacing, useApostrophie, useComma, useQuote])
 
     function textChangeHandler() {
         setText(textElement.current.value)
@@ -60,9 +68,7 @@ export default function main() {
             event.preventDefault();
         }
     }
-    function addTypography(type){
-        
-    }
+
     function parseColRow(method) {
         const words = text.replaceAll('\n', " ").split(" ").map(i => i.trim())
         const prepGrid = []
@@ -86,16 +92,32 @@ export default function main() {
         setGrid(prepGrid)
         setGridSpacing(largestWordInColumn)
     }
-    function buildOutput(typography={comma: false, apostrophie: false, quote:false}){
-        let {comma, apostrophie, quote} = typography
+    function buildOutput(){
+        const apos = useApostrophie ? `'` : ``
+        const quote = useQuote ? `"` : ``
+        const comma = useComma ? `,` : "" 
         let result = grid.map((row, indexRow) => {
             return row.map((word, indexCol) => {
                 let numSpaces = gridSpacing[indexCol] - word.length + 1
-                return indexCol !== row.length - 1 ? `"${word}",${" ".repeat(numSpaces)}` : `"${word}"`
+                return indexCol !== row.length - 1 ? `${apos}${quote}${word}${quote}${apos}${comma}${" ".repeat(numSpaces)}` : `${apos}${quote}${word}${quote}${apos}`
             }).join("")
-        }).join("\n")
+        }).join(`\n`)
         // console.log(result, gridSpacing)
         setOutput(result)
+    }
+    function symbolClickHandler({quote, comma, apostrophie}){
+        if (quote === typographyClasses.on)
+            setUseQuote(true)
+        if (quote === typographyClasses.off)
+            setUseQuote(false)
+        if (comma === typographyClasses.on)
+            setUseComma(true)
+        if (comma === typographyClasses.off)
+            setUseComma(false)
+        if (apostrophie === typographyClasses.on)
+            setUseApostrophie(true)
+        if (apostrophie === typographyClasses.off)
+            setUseApostrophie(false)
     }
     return (
         <div>
@@ -146,7 +168,7 @@ export default function main() {
                         </Stack>
                     </Box>
                 </div >
-                <Typography options={options} classes={toggleTypograpgyClasses}/>
+                <Typography options={typographyOptions} classes={typographyClasses} symbolClickHandler={symbolClickHandler}/>
             </div>
         </div>
     )

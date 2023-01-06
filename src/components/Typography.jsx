@@ -6,26 +6,28 @@ import Button from '@mui/material/Button';
 import { useRef, useState, useEffect } from 'react'
 
 export default function typography(prop) {
-    const {classes, options} = prop 
-    const [commaClass, setCommaClass] = useState(options.comma)
-    const [quoteClass, setQuoteClass] = useState(options.quote)
-    const [apostrophieClass, setApostrophieClass] = useState(options.apostrophie)
-
+    const {classes, symbolClickHandler} = prop 
+    const [commaClass, setCommaClass] = useState(classes.off)
+    const [quoteClass, setQuoteClass] = useState(classes.off)
+    const [apostrophieClass, setApostrophieClass] = useState(classes.off)
+    useEffect(()=>{
+        symbolClickHandler({quote: quoteClass, apostrophie: apostrophieClass, comma: commaClass})
+    },[quoteClass, apostrophieClass, commaClass])
     function commaClickHandler(){
         setCommaClass(toggleClass(commaClass))
     }
     function quoteClickHandler(){
+        if (quoteClass === classes.off && apostrophieClass === classes.on)
+            setApostrophieClass(toggleClass(apostrophieClass))
         setQuoteClass(toggleClass(quoteClass))
-        if (quoteClass && apostrophieClass)
-            setApostrophieClass("outlined")
     }
     function apostrophieClickHandler(){
+        if (quoteClass === classes.on && apostrophieClass === classes.off)
+            setQuoteClass(toggleClass(quoteClass))
         setApostrophieClass(toggleClass(apostrophieClass))
-        if (apostrophieClass && quoteClass)
-            setQuoteClass("outlined")
     }
     function toggleClass(name){
-        return name === classes[0] ? classes[1] : classes[0]
+        return name === classes.on ? classes.off : classes.on
     }
     return (
         <div className="typography">
