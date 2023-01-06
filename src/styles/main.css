@@ -1,3 +1,8 @@
+*{
+    box-sizing: border-box;
+
+}
+
 textarea{
     width: 800px;
     height: 100px;
@@ -11,6 +16,7 @@ textarea{
     overflow: scroll;
     font-family: monospace;
     white-space: pre;
+    padding: 1em;
 }
 
 .wrapper {
@@ -21,8 +27,16 @@ textarea{
 }
 .results-wrapper{
     display: flex;
-    align-items: center
+    flex-direction: column;
 }
+.row-two, .row-one{
+    display: flex;
+}
+.row-one{
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
 .icon {
     font-size: 1.5em;
     font-weight: bold;

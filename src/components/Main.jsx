@@ -2,14 +2,12 @@ import { useRef, useState, useEffect } from 'react'
 import Typography from './Typography';
 import Sort from './Sort';
 import '../styles/main.css'
-import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Slider from '@mui/material/Slider';
-import Stack from '@mui/material/Stack';
 import lorem from '../lorem'
 
 export default function main() {
-    const typographyClasses = {off: "outlined", on: "contained"}
+    const typographyClasses = { off: "outlined", on: "contained" }
     const textElement = useRef()
     const [text, setText] = useState(lorem)
     const [grid, setGrid] = useState([])
@@ -26,7 +24,7 @@ export default function main() {
     const [useComma, setUseComma] = useState(false)
     const [useApostrophie, setUseApostrophie] = useState(false)
     const [useQuote, setUseQuote] = useState(false)
-    
+
     useEffect(() => {
         parseColRow()
         setLastAction(null)
@@ -36,15 +34,15 @@ export default function main() {
         setLastAction('col')
     }, [columns])
     useEffect(() => {
-        if (lastAction === 'col'){
+        if (lastAction === 'col') {
             parseColRow('col')
         } else {
             parseColRow()
         }
     }, [text])
-    useEffect(()=>{
+    useEffect(() => {
         buildOutput()
-    },[grid, gridSpacing, useApostrophie, useComma, useQuote])
+    }, [grid, gridSpacing, useApostrophie, useComma, useQuote])
 
     function textChangeHandler() {
         setText(textElement.current.value)
@@ -93,10 +91,10 @@ export default function main() {
         setGrid(prepGrid)
         setGridSpacing(largestWordInColumn)
     }
-    function buildOutput(){
+    function buildOutput() {
         const apos = useApostrophie ? `'` : ``
         const quote = useQuote ? `"` : ``
-        const comma = useComma ? `,` : "" 
+        const comma = useComma ? `,` : ""
         let result = grid.map((row, indexRow) => {
             return row.map((word, indexCol) => {
                 let numSpaces = gridSpacing[indexCol] - word.length + 1
@@ -105,7 +103,7 @@ export default function main() {
         }).join(`\n`)
         setOutput(result)
     }
-    function symbolClickHandler({quote, comma, apostrophie}){
+    function symbolClickHandler({ quote, comma, apostrophie }) {
         if (quote === typographyClasses.on)
             setUseQuote(true)
         if (quote === typographyClasses.off)
@@ -120,10 +118,10 @@ export default function main() {
             setUseApostrophie(false)
     }
 
-    function optimizeClickHandler(){
-        
+    function optimizeClickHandler() {
+
     }
-    function sortClickHandler(){
+    function sortClickHandler() {
 
     }
     return (
@@ -139,44 +137,42 @@ export default function main() {
                     <Button variant="outlined" size="small">Variables</Button>
                 </div>
 
-                <Box sx={{ width: 300 }}>
-                    <Slider
-                        value={columns}
-                        getAriaValueText={valueColumns}
-                        valueLabelDisplay="auto"
-                        step={1}
-                        onChange={handleChangeColumns}
-                        marks
-                        min={1}
-                        max={10}
-                    />
-                </Box>
 
                 <div className='results-wrapper'>
-                    <div className="results">
-                        {output}
+                    <div className="row-one">
+                        <Slider
+                            sx={{ width: 500 }}
+                            value={columns}
+                            getAriaValueText={valueColumns}
+                            valueLabelDisplay="auto"
+                            step={1}
+                            onChange={handleChangeColumns}
+                            marks
+                            min={1}
+                            max={10}
+                        />
                     </div>
-
-                    <Box sx={{ height: 300 }}>
-                        <Stack sx={{ height: 300 }} alignItems="center" direction="column">
-
-                            <Slider
-                                orientation="vertical"
-                                marks
-                                value={rows}
-                                step={1}
-                                min={1}
-                                max={10}
-                                valueLabelDisplay="auto"
-                                getAriaValueText={valueRows}
-                                onChange={handleChangeRows}
-                                onKeyDown={preventHorizontalKeyboardNavigation}
-                            />
-                        </Stack>
-                    </Box>
+                    <div className="row-two">
+                        <Slider
+                            sx={{ height: 300 }}
+                            orientation="vertical"
+                            marks
+                            value={rows}
+                            step={1}
+                            min={1}
+                            max={10}
+                            valueLabelDisplay="auto"
+                            getAriaValueText={valueRows}
+                            onChange={handleChangeRows}
+                            onKeyDown={preventHorizontalKeyboardNavigation}
+                        />
+                        <div className="results">
+                            {output}
+                        </div>
+                    </div>
                 </div >
-                <Typography options={typographyOptions} classes={typographyClasses} symbolClickHandler={symbolClickHandler}/>
-                <Sort sortClickHandler={sortClickHandler} optimizeClickHandler={optimizeClickHandler}/>
+                <Typography options={typographyOptions} classes={typographyClasses} symbolClickHandler={symbolClickHandler} />
+                <Sort sortClickHandler={sortClickHandler} optimizeClickHandler={optimizeClickHandler} />
             </div>
         </div>
     )
