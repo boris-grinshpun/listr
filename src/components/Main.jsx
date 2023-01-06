@@ -170,9 +170,14 @@ export default function main() {
                             {output}
                         </div>
                     </div>
+                    <div className="row-three">
+                        <Typography options={typographyOptions} classes={typographyClasses} symbolClickHandler={symbolClickHandler} />
+                        <Button variant="outlined" size="small" style={{ height: '32px' }}>spacing</Button>
+                    </div>
+                    <div className="row-four">
+                        <Sort sortClickHandler={sortClickHandler} optimizeClickHandler={optimizeClickHandler} />
+                    </div>
                 </div >
-                <Typography options={typographyOptions} classes={typographyClasses} symbolClickHandler={symbolClickHandler} />
-                <Sort sortClickHandler={sortClickHandler} optimizeClickHandler={optimizeClickHandler} />
             </div>
         </div>
     )

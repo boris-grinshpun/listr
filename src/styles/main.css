@@ -29,12 +29,22 @@ textarea{
     display: flex;
     flex-direction: column;
 }
-.row-two, .row-one{
+.row-two, .row-one, .row-three, .row-four{
     display: flex;
 }
 .row-one{
     flex-direction: row;
     justify-content: flex-end;
+}
+.row-three{
+    justify-content: center;
+    align-items: center;
+    width:100%;
+
+}
+.row-four{
+    flex-direction: column;
+    align-items: center;
 }
 
 .icon {
