@@ -3,10 +3,9 @@ import Quote from '../assets/Quote'
 import Apostrophie from '../assets/Apostrophie'
 import Button from '@mui/material/Button';
 
-import { useRef, useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 
-export default function typography(prop) {
-    const {classes, symbolClickHandler} = prop 
+export default function typography({classes, symbolClickHandler}) {
     const [commaClass, setCommaClass] = useState(classes.off)
     const [quoteClass, setQuoteClass] = useState(classes.off)
     const [apostrophieClass, setApostrophieClass] = useState(classes.off)

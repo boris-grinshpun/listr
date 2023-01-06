@@ -1,5 +1,6 @@
 import { useRef, useState, useEffect } from 'react'
 import Typography from './Typography';
+import Sort from './Sort';
 import '../styles/main.css'
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -17,11 +18,11 @@ export default function main() {
     const [rows, setRows] = useState(5)
     const [columns, setColumns] = useState(2)
     const [lastAction, setLastAction] = useState(null)
-    const [typographyOptions, setOptions] = useState({
+    const typographyOptions = {
         comma: typographyClasses.off,
         quote: typographyClasses.off,
         apostrophie: typographyClasses.off
-    })
+    }
     const [useComma, setUseComma] = useState(false)
     const [useApostrophie, setUseApostrophie] = useState(false)
     const [useQuote, setUseQuote] = useState(false)
@@ -51,7 +52,6 @@ export default function main() {
 
     function handleChangeColumns(e, val) {
         setColumns(Number(val))
-
     }
     function handleChangeRows(e, val) {
         setRows(Number(val))
@@ -89,6 +89,7 @@ export default function main() {
             }
         })
         if (row.length) prepGrid.push(row)
+
         setGrid(prepGrid)
         setGridSpacing(largestWordInColumn)
     }
@@ -102,7 +103,6 @@ export default function main() {
                 return indexCol !== row.length - 1 ? `${apos}${quote}${word}${quote}${apos}${comma}${" ".repeat(numSpaces)}` : `${apos}${quote}${word}${quote}${apos}`
             }).join("")
         }).join(`\n`)
-        // console.log(result, gridSpacing)
         setOutput(result)
     }
     function symbolClickHandler({quote, comma, apostrophie}){
@@ -118,6 +118,13 @@ export default function main() {
             setUseApostrophie(true)
         if (apostrophie === typographyClasses.off)
             setUseApostrophie(false)
+    }
+
+    function optimizeClickHandler(){
+        
+    }
+    function sortClickHandler(){
+
     }
     return (
         <div>
@@ -169,6 +176,7 @@ export default function main() {
                     </Box>
                 </div >
                 <Typography options={typographyOptions} classes={typographyClasses} symbolClickHandler={symbolClickHandler}/>
+                <Sort sortClickHandler={sortClickHandler} optimizeClickHandler={optimizeClickHandler}/>
             </div>
         </div>
     )
