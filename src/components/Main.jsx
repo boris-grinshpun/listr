@@ -5,6 +5,7 @@ import '../styles/main.css'
 import Button from '@mui/material/Button';
 import Slider from '@mui/material/Slider';
 import lorem from '../lorem'
+import sort from './Sort';
 
 export default function main() {
     const btnState = { off: "outlined", on: "contained" }
@@ -16,15 +17,10 @@ export default function main() {
     const [rows, setRows] = useState(5)
     const [columns, setColumns] = useState(2)
     const [lastAction, setLastAction] = useState(null)
-    const typographyOptions = {
-        comma: btnState.off,
-        quote: btnState.off,
-        apostrophie: btnState.off
-    }
-    const sortOptions = {
-        by: null,       // row, col
-        direction: true // true - up, false - down 
-    }
+    const [sortOptions, setSortOptions] = useState({
+        direction: null, // true - up, false - down 
+        order: null      // row, col
+    })
     const [useComma, setUseComma] = useState(false)
     const [useApostrophie, setUseApostrophie] = useState(false)
     const [useQuote, setUseQuote] = useState(false)
@@ -35,10 +31,12 @@ export default function main() {
         parseColRow()
         setLastAction(null)
     }, [rows])
+
     useEffect(() => {
         parseColRow('col')
         setLastAction('col')
     }, [columns])
+
     useEffect(() => {
         if (lastAction === 'col') {
             parseColRow('col')
@@ -46,9 +44,15 @@ export default function main() {
             parseColRow()
         }
     }, [text])
+
     useEffect(() => {
         buildOutput()
     }, [grid, gridSpacing, useApostrophie, useComma, useQuote, useSpacing])
+
+    useEffect(() => {
+        parseColRow(lastAction)
+        console.log(lastAction)
+    },[sortOptions])
 
     function textChangeHandler() {
         setText(textElement.current.value)
@@ -74,11 +78,31 @@ export default function main() {
     }
 
     function parseColRow(method) {
-        const words = text.replaceAll('\n', " ").split(" ").map(i => i.trim())
+        let words = text.replaceAll('\n', " ").split(" ").map(i => i.trim())
         const prepGrid = []
         let row = []
         let largestWordInColumn = []
         const devider = method === 'col' ? columns : Math.ceil(words.length / rows)
+        if (sortOptions.direction !== null) {
+            console.log(words.join(","))
+            words.sort((a,b)=>{
+                let word1 = a
+                let word2 = b
+                if (sortOptions.order){ 
+                    if (word1.toLowerCase() > word2.toLowerCase())
+                        return 1
+                    else
+                        return -1
+                } else {
+                    if (word2.toLowerCase() > word1.toLowerCase())
+                        return 1
+                    else
+                        return -1
+                    }
+                
+            })
+            console.log('sorted', words.join(","))
+        }
         words.forEach((word, index) => {
             row.push(word)
             let col = index % devider
@@ -101,7 +125,6 @@ export default function main() {
         const apos = useApostrophie ? `'` : ``
         const quote = useQuote ? `"` : ``
         const comma = useComma ? `,` : ""
-        console.log(grid)
         let result = grid.map((row, indexRow) => {
             return row.map((word, indexCol) => {
                 let numSpaces = " "
@@ -135,8 +158,11 @@ export default function main() {
     function optimizeClickHandler() {
 
     }
-    function sortClickHandler(sortDirection) {
-
+    function sortClickHandler({direction, order}) {
+        setSortOptions({
+            direction,
+            order
+        })
     }
     return (
         <div>
@@ -187,7 +213,6 @@ export default function main() {
                     <div className="row-three">
                         <Typography 
                             btnState={btnState} 
-                            options={typographyOptions} 
                             symbolClickHandler={symbolClickHandler}
                         />
                         
@@ -197,7 +222,7 @@ export default function main() {
                             btnState={btnState}
                             sortClickHandler={sortClickHandler} 
                             optimizeClickHandler={optimizeClickHandler} 
-                        ß/>
+                        />
                     </div>
                 </div >
             </div>

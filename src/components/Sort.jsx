@@ -8,24 +8,38 @@ import { useState, useEffect } from 'react'
 export default function sort({sortClickHandler, optimizeClickHandler, btnState}) {
     const [sortByCol, setSortByCol] = useState(btnState.off)    
     const [sortByRow, setSortByRow] = useState(btnState.off)
-    const [directionUp, setDirectionUp] = useState(btnState.off)  
-    const [directionDown, setDirectionDown] = useState(btnState.off)  
+    const [orderUp, setOrderUp] = useState(btnState.off)  
+    const [orderDown, setOrderDown] = useState(btnState.off)  
     const [optimize, setOptimize] = useState(btnState.off)    
+
+    useEffect(()=>{
+        optimizeClickHandler()
+    },[optimize])
+    useEffect(()=>{
+        const options = {direction: null, order: null}
+        if(sortByCol === btnState.on){
+            options.direction = true
+            options.order = orderUp === btnState.on ? true : false
+        }
+        if(sortByRow === btnState.on){
+            options.direction = false
+            options.order = orderUp === btnState.on ? true : false
+        }
+        sortClickHandler(options)
+    },[sortByCol, sortByRow, orderUp, orderDown])
     // true - column, false - row
     function sortByClickHandler(sortBy){
         setOptimize(btnState.off)
-        if (directionDown === btnState.off && directionUp === btnState.off)
-            setDirectionUp(btnState.on)
+        if (orderDown === btnState.off && orderUp === btnState.off)
+            setOrderUp(btnState.on)
         
         if (sortBy){
-            if (sortByRow === btnState.on && sortByCol === btnState.off)
-                setSortByRow(toggleButton(sortByRow))
-            setSortByCol(toggleButton(sortByCol))
+            setSortByRow(btnState.off)
+            setSortByCol(btnState.on)
             
         } else {
-            if (sortByCol === btnState.on && sortByRow === btnState.off)
-                setSortByCol(toggleButton(sortByCol))
-            setSortByRow(toggleButton(sortByRow))
+            setSortByRow(btnState.on)
+            setSortByCol(btnState.off)
         }
     }
     // true - up, false - down 
@@ -34,19 +48,17 @@ export default function sort({sortClickHandler, optimizeClickHandler, btnState})
         if (sortByCol === btnState.off && sortByRow === btnState.off)
             setSortByCol(btnState.on)
         if (direction){
-            if (directionDown === btnState.on && directionUp === btnState.off)
-                setDirectionDown(toggleButton(directionDown))
-            setDirectionUp(toggleButton(directionUp))
+            setOrderDown(btnState.off)
+            setOrderUp(btnState.on)
             
         } else {
-            if (directionUp === btnState.on && directionDown === btnState.off)
-                setDirectionUp(toggleButton(directionUp))
-            setDirectionDown(toggleButton(directionDown))
+            setOrderDown(btnState.on)
+            setOrderUp(btnState.off)
         }
     }
     function optimizeSelectHandler(){
-        setDirectionUp(btnState.off)
-        setDirectionDown(btnState.off)
+        setOrderUp(btnState.off)
+        setOrderDown(btnState.off)
         setSortByCol(btnState.off)
         setSortByRow(btnState.off)
         setOptimize(toggleButton(optimize))
@@ -71,10 +83,10 @@ export default function sort({sortClickHandler, optimizeClickHandler, btnState})
                 <div className="label">
                    Direction
                 </div>
-                <Button variant={directionUp} title="Sort" onClick={()=>orderClickHandler(true)}>
+                <Button variant={orderUp} title="Sort" onClick={()=>orderClickHandler(true)}>
                     <SortUp className="icon" />
                 </Button>
-                <Button variant={directionDown} title="Sort" onClick={()=>orderClickHandler(false)}>
+                <Button variant={orderDown} title="Sort" onClick={()=>orderClickHandler(false)}>
                     <SortDown className="icon" />
                 </Button>
             </div>

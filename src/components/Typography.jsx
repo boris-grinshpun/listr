@@ -17,14 +17,12 @@ export default function typography({btnState, symbolClickHandler}) {
         setComma(toggle(comma))
     }
     function quoteClickHandler(){
-        if (quote === btnState.off && apostrophie === btnState.on)
-            setApostrophie(toggle(apostrophie))
-        setQuote(toggle(quote))
+        setApostrophie(btnState.off)
+        setQuote(btnState.on)
     }
     function apostrophieClickHandler(){
-        if (quote === btnState.on && apostrophie === btnState.off)
-            setQuote(toggle(quote))
-        setApostrophie(toggle(apostrophie))
+        setQuote(btnState.off)
+        setApostrophie(btnState.on)
     }
     function spacingClickHandler(){
         setSpacing(toggle(spacing))
