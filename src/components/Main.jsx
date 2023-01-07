@@ -47,7 +47,7 @@ export default function main() {
 
     useEffect(() => {
         buildOutput()
-    }, [grid, gridSpacing, useApostrophie, useComma, useQuote, useSpacing])
+    }, [grid, useApostrophie, useComma, useQuote, useSpacing])
 
     useEffect(() => {
         parseColRow(lastAction)
