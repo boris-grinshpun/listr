@@ -7,7 +7,7 @@ import Slider from '@mui/material/Slider';
 import lorem from '../lorem'
 
 export default function main() {
-    const typographyClasses = { off: "outlined", on: "contained" }
+    const btnState = { off: "outlined", on: "contained" }
     const textElement = useRef()
     const [text, setText] = useState(lorem)
     const [grid, setGrid] = useState([])
@@ -17,9 +17,9 @@ export default function main() {
     const [columns, setColumns] = useState(2)
     const [lastAction, setLastAction] = useState(null)
     const typographyOptions = {
-        comma: typographyClasses.off,
-        quote: typographyClasses.off,
-        apostrophie: typographyClasses.off
+        comma: btnState.off,
+        quote: btnState.off,
+        apostrophie: btnState.off
     }
     const sortOptions = {
         by: null,       // row, col
@@ -114,21 +114,21 @@ export default function main() {
         setOutput(result)
     }
     function symbolClickHandler({ quote, comma, apostrophie, spacing }) {
-        if (quote === typographyClasses.on)
+        if (quote === btnState.on)
             setUseQuote(true)
-        if (quote === typographyClasses.off)
+        if (quote === btnState.off)
             setUseQuote(false)
-        if (comma === typographyClasses.on)
+        if (comma === btnState.on)
             setUseComma(true)
-        if (comma === typographyClasses.off)
+        if (comma === btnState.off)
             setUseComma(false)
-        if (apostrophie === typographyClasses.on)
+        if (apostrophie === btnState.on)
             setUseApostrophie(true)
-        if (apostrophie === typographyClasses.off)
+        if (apostrophie === btnState.off)
             setUseApostrophie(false)
-        if (spacing === typographyClasses.on)
+        if (spacing === btnState.on)
             setUseSpacing(true)
-        if (spacing === typographyClasses.off)
+        if (spacing === btnState.off)
             setUseSpacing(false)
     }
 
@@ -185,11 +185,19 @@ export default function main() {
                         </div>
                     </div>
                     <div className="row-three">
-                        <Typography options={typographyOptions} classes={typographyClasses} symbolClickHandler={symbolClickHandler} />
+                        <Typography 
+                            btnState={btnState} 
+                            options={typographyOptions} 
+                            symbolClickHandler={symbolClickHandler}
+                        />
                         
                     </div>
                     <div className="row-four">
-                        <Sort sortClickHandler={sortClickHandler} optimizeClickHandler={optimizeClickHandler} classes={typographyClasses} />
+                        <Sort 
+                            btnState={btnState}
+                            sortClickHandler={sortClickHandler} 
+                            optimizeClickHandler={optimizeClickHandler} 
+                        ß/>
                     </div>
                 </div >
             </div>

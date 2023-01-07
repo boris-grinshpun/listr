@@ -5,53 +5,54 @@ import Button from '@mui/material/Button';
 
 import { useState, useEffect } from 'react'
 
-export default function sort({sortClickHandler, optimizeClickHandler, classes}) {
-    const [sortByCol, setSortByCol] = useState(classes.off)    
-    const [sortByRow, setSortByRow] = useState(classes.off)
-    const [directionUp, setDirectionUp] = useState(classes.off)  
-    const [directionDown, setDirectionDown] = useState(classes.off)  
-    const [optimize, setOptimize] = useState(classes.off)    
+export default function sort({sortClickHandler, optimizeClickHandler, btnState}) {
+    const [sortByCol, setSortByCol] = useState(btnState.off)    
+    const [sortByRow, setSortByRow] = useState(btnState.off)
+    const [directionUp, setDirectionUp] = useState(btnState.off)  
+    const [directionDown, setDirectionDown] = useState(btnState.off)  
+    const [optimize, setOptimize] = useState(btnState.off)    
     // true - column, false - row
     function sortByClickHandler(sortBy){
-        setOptimize(classes.off)
-        if (directionDown === classes.off && directionUp === classes.off)
-        setDirectionUp(classes.on)
+        setOptimize(btnState.off)
+        if (directionDown === btnState.off && directionUp === btnState.off)
+            setDirectionUp(btnState.on)
+        
         if (sortBy){
-            if (sortByRow === classes.on && sortByCol === classes.off)
+            if (sortByRow === btnState.on && sortByCol === btnState.off)
                 setSortByRow(toggleButton(sortByRow))
             setSortByCol(toggleButton(sortByCol))
             
         } else {
-            if (sortByCol === classes.on && sortByRow === classes.off)
+            if (sortByCol === btnState.on && sortByRow === btnState.off)
                 setSortByCol(toggleButton(sortByCol))
             setSortByRow(toggleButton(sortByRow))
         }
     }
     // true - up, false - down 
     function orderClickHandler(direction){
-        setOptimize(classes.off)
-        if (sortByCol === classes.off && sortByRow === classes.off)
-            setSortByCol(classes.on)
+        setOptimize(btnState.off)
+        if (sortByCol === btnState.off && sortByRow === btnState.off)
+            setSortByCol(btnState.on)
         if (direction){
-            if (directionDown === classes.on && directionUp === classes.off)
+            if (directionDown === btnState.on && directionUp === btnState.off)
                 setDirectionDown(toggleButton(directionDown))
             setDirectionUp(toggleButton(directionUp))
             
         } else {
-            if (directionUp === classes.on && directionDown === classes.off)
+            if (directionUp === btnState.on && directionDown === btnState.off)
                 setDirectionUp(toggleButton(directionUp))
             setDirectionDown(toggleButton(directionDown))
         }
     }
     function optimizeSelectHandler(){
-        setDirectionUp(classes.off)
-        setDirectionDown(classes.off)
-        setSortByCol(classes.off)
-        setSortByRow(classes.off)
+        setDirectionUp(btnState.off)
+        setDirectionDown(btnState.off)
+        setSortByCol(btnState.off)
+        setSortByRow(btnState.off)
         setOptimize(toggleButton(optimize))
     }
-    function toggleButton(btnState){
-        return btnState === classes.on ? classes.off : classes.on
+    function toggleButton(state){
+        return state === btnState.on ? btnState.off : btnState.on
     }
     return (
         <div className="sort">
