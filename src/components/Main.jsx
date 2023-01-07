@@ -21,9 +21,15 @@ export default function main() {
         quote: typographyClasses.off,
         apostrophie: typographyClasses.off
     }
+    const sortOptions = {
+        by: null,       // row, col
+        direction: true // true - up, false - down 
+    }
     const [useComma, setUseComma] = useState(false)
     const [useApostrophie, setUseApostrophie] = useState(false)
     const [useQuote, setUseQuote] = useState(false)
+    const [useSpacing, setUseSpacing] = useState(false)
+    const [useSortBy, setSortBy] = useState(null)
 
     useEffect(() => {
         parseColRow()
@@ -42,7 +48,7 @@ export default function main() {
     }, [text])
     useEffect(() => {
         buildOutput()
-    }, [grid, gridSpacing, useApostrophie, useComma, useQuote])
+    }, [grid, gridSpacing, useApostrophie, useComma, useQuote, useSpacing])
 
     function textChangeHandler() {
         setText(textElement.current.value)
@@ -95,15 +101,19 @@ export default function main() {
         const apos = useApostrophie ? `'` : ``
         const quote = useQuote ? `"` : ``
         const comma = useComma ? `,` : ""
+        console.log(grid)
         let result = grid.map((row, indexRow) => {
             return row.map((word, indexCol) => {
-                let numSpaces = gridSpacing[indexCol] - word.length + 1
-                return indexCol !== row.length - 1 ? `${apos}${quote}${word}${quote}${apos}${comma}${" ".repeat(numSpaces)}` : `${apos}${quote}${word}${quote}${apos}`
+                let numSpaces = " "
+                if (useSpacing){
+                    numSpaces = " ".repeat(gridSpacing[indexCol] - word.length + 1)
+                }
+                return indexCol !== row.length - 1 ? `${apos}${quote}${word}${quote}${apos}${comma}${numSpaces}` : `${apos}${quote}${word}${quote}${apos}`
             }).join("")
         }).join(`\n`)
         setOutput(result)
     }
-    function symbolClickHandler({ quote, comma, apostrophie }) {
+    function symbolClickHandler({ quote, comma, apostrophie, spacing }) {
         if (quote === typographyClasses.on)
             setUseQuote(true)
         if (quote === typographyClasses.off)
@@ -116,12 +126,16 @@ export default function main() {
             setUseApostrophie(true)
         if (apostrophie === typographyClasses.off)
             setUseApostrophie(false)
+        if (spacing === typographyClasses.on)
+            setUseSpacing(true)
+        if (spacing === typographyClasses.off)
+            setUseSpacing(false)
     }
 
     function optimizeClickHandler() {
 
     }
-    function sortClickHandler() {
+    function sortClickHandler(sortDirection) {
 
     }
     return (
@@ -172,10 +186,10 @@ export default function main() {
                     </div>
                     <div className="row-three">
                         <Typography options={typographyOptions} classes={typographyClasses} symbolClickHandler={symbolClickHandler} />
-                        <Button variant="outlined" size="small" style={{ height: '32px' }}>spacing</Button>
+                        
                     </div>
                     <div className="row-four">
-                        <Sort sortClickHandler={sortClickHandler} optimizeClickHandler={optimizeClickHandler} />
+                        <Sort sortClickHandler={sortClickHandler} optimizeClickHandler={optimizeClickHandler} classes={typographyClasses} />
                     </div>
                 </div >
             </div>
