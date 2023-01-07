@@ -103,6 +103,7 @@ export default function main() {
             })
             console.log('sorted', words.join(","))
         }
+        let numRows = 0
         words.forEach((word, index) => {
             row.push(word)
             let col = index % devider
@@ -113,11 +114,18 @@ export default function main() {
             }
             if ((index + 1) % devider === 0) {
                 prepGrid.push(row)
+                numRows ++
                 row = []
             }
         })
-        if (row.length) prepGrid.push(row)
-
+        if (row.length) {
+            prepGrid.push(row)
+            numRows ++
+        }
+        setRows(numRows)
+        if (method !== 'col'){
+            setColumns(prepGrid[0].length)
+        }
         setGrid(prepGrid)
         setGridSpacing(largestWordInColumn)
     }
@@ -189,7 +197,7 @@ export default function main() {
                             onChange={handleChangeColumns}
                             marks
                             min={1}
-                            max={10}
+                            max={20}
                         />
                     </div>
                     <div className="row-two">
@@ -200,7 +208,7 @@ export default function main() {
                             value={rows}
                             step={1}
                             min={1}
-                            max={10}
+                            max={20}
                             valueLabelDisplay="auto"
                             getAriaValueText={valueRows}
                             onChange={handleChangeRows}
