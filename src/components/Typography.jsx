@@ -18,11 +18,11 @@ export default function typography({ btnState, symbolClickHandler }) {
     }
     function quoteClickHandler() {
         setApostrophie(btnState.off)
-        setQuote(btnState.on)
+        setQuote(toggle(quote))
     }
     function apostrophieClickHandler() {
         setQuote(btnState.off)
-        setApostrophie(btnState.on)
+        setApostrophie(toggle(apostrophie))
     }
     function spacingClickHandler() {
         setSpacing(toggle(spacing))
