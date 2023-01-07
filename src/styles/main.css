@@ -63,7 +63,8 @@ textarea{
     display: flex;
     flex-direction: row;
     gap: 10px;
-    width: 350px;
+    width: 500px;
+    margin-left: 15px;
     justify-content: flex-start;
     margin-bottom:10px;
 }
