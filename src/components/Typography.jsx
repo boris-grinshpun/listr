@@ -8,9 +8,9 @@ import { btnState } from './constants';
 
 export default function typography({ symbolClickHandler }) {
     const [comma, setComma] = useState(btnState.off)
-    const [quote, setQuote] = useState(btnState.off)
+    const [quote, setQuote] = useState(btnState.on)
     const [apostrophie, setApostrophie] = useState(btnState.off)
-    const [spacing, setSpacing] = useState(btnState.off)
+    const [spacing, setSpacing] = useState(btnState.on)
 
     useEffect(() => {
         symbolClickHandler({ quote: isOn(quote), apostrophie: isOn(apostrophie), comma: isOn(comma), spacing: isOn(spacing) })
