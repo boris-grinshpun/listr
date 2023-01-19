@@ -35,7 +35,7 @@ textarea{
 .row-one{
     flex-direction: row;
     justify-content: flex-start;
-    margin-left: 30px;
+    /* margin-left: 30px; */
 }
 .row-three{
     justify-content: center;

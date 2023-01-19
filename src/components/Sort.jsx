@@ -4,8 +4,9 @@ import Optimize from '../assets/Optimize'
 import Button from '@mui/material/Button';
 
 import { useState, useEffect } from 'react'
+import { btnState } from './constants';
 
-export default function sort({sortClickHandler, optimizeClickHandler, btnState}) {
+export default function sort({sortClickHandler, optimizeClickHandler}) {
     const [sortByCol, setSortByCol] = useState(btnState.off)    
     const [sortByRow, setSortByRow] = useState(btnState.off)
     const [orderUp, setOrderUp] = useState(btnState.off)  

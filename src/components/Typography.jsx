@@ -4,15 +4,18 @@ import Apostrophie from '../assets/Apostrophie'
 import Button from '@mui/material/Button';
 
 import { useState, useEffect } from 'react'
+import { btnState } from './constants';
 
-export default function typography({ btnState, symbolClickHandler }) {
+export default function typography({ symbolClickHandler }) {
     const [comma, setComma] = useState(btnState.off)
     const [quote, setQuote] = useState(btnState.off)
     const [apostrophie, setApostrophie] = useState(btnState.off)
     const [spacing, setSpacing] = useState(btnState.off)
+
     useEffect(() => {
-        symbolClickHandler({ quote: quote, apostrophie: apostrophie, comma: comma, spacing: spacing })
+        symbolClickHandler({ quote: isOn(quote), apostrophie: isOn(apostrophie), comma: isOn(comma), spacing: isOn(spacing) })
     }, [quote, apostrophie, comma, spacing])
+
     function commaClickHandler() {
         setComma(toggle(comma))
     }
@@ -30,6 +33,7 @@ export default function typography({ btnState, symbolClickHandler }) {
     function toggle(state) {
         return state === btnState.on ? btnState.off : btnState.on
     }
+    
     return (
         <div className="typography">
             <div className="sort-by">
@@ -43,4 +47,8 @@ export default function typography({ btnState, symbolClickHandler }) {
             </div>
         </div>
     )
+}
+
+function isOn(state){
+    return state === btnState.on
 }
